@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: adtech-insights-api
+  datasource:
+    url: ${CLICKHOUSE_URL:jdbc:ch://localhost:8123/adtech}
+    username: ${CLICKHOUSE_USER:default}
+    password: ${CLICKHOUSE_PASSWORD:}
+    driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      clickhouseQuery:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
